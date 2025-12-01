@@ -1,0 +1,12 @@
+# test
+FROM golang:1.22
+
+ENV GO111MODULE=on
+
+WORKDIR /app
+
+COPY . .
+
+RUN go mod download
+
+ENTRYPOINT ["go", "test", "-v", "-coverprofile=coverage.out", "-covermode=atomic", "./..."]

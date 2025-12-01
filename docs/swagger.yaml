@@ -1,0 +1,184 @@
+consumes:
+    - application/json
+definitions:
+    MessageTransaction:
+        properties:
+            content:
+                type: string
+                x-go-name: Content
+            created_at:
+                x-go-name: CreatedAt
+            id:
+                x-go-name: ID
+            recipient:
+                type: string
+                x-go-name: Recipient
+            sent_at:
+                x-go-name: SentAt
+            status:
+                type: string
+                x-go-name: Status
+        type: object
+        x-go-package: github.com/mkaykisiz/sender
+    apiError:
+        properties:
+            baseError:
+                type: string
+                x-go-name: BaseError
+                x-go-type: error
+            code:
+                format: int64
+                type: integer
+                x-go-name: Code
+            message:
+                type: string
+                x-go-name: Message
+            name:
+                type: string
+                x-go-name: Name
+            popup:
+                $ref: '#/definitions/apiErrorPopup'
+            statusCode:
+                format: int64
+                type: integer
+                x-go-name: StatusCode
+            toastItems:
+                items:
+                    $ref: '#/definitions/apiErrorToastItem'
+                type: array
+                x-go-name: ToastItems
+        type: object
+        x-go-package: github.com/mkaykisiz/sender/docs
+    apiErrorPopup:
+        properties:
+            iconUrl:
+                type: string
+                x-go-name: IconURL
+            message:
+                type: string
+                x-go-name: Message
+            negativeButton:
+                $ref: '#/definitions/apiErrorPopupButton'
+            positiveButton:
+                $ref: '#/definitions/apiErrorPopupButton'
+            title:
+                type: string
+                x-go-name: Title
+        type: object
+        x-go-package: github.com/mkaykisiz/sender/docs
+    apiErrorPopupButton:
+        properties:
+            text:
+                type: string
+                x-go-name: Text
+        type: object
+        x-go-package: github.com/mkaykisiz/sender/docs
+    apiErrorToastItem:
+        properties:
+            iconUrl:
+                type: string
+                x-go-name: IconURL
+            message:
+                type: string
+                x-go-name: Message
+        type: object
+        x-go-package: github.com/mkaykisiz/sender/docs
+info:
+    description: Documentation for Sender Service API
+    title: Sender Service API.
+    version: 1.0.0
+paths:
+    /health:
+        get:
+            description: checks health
+            operationId: healthRequest
+            summary: Health
+            tags:
+                - Sender
+    /retrieve-sent-messages:
+        get:
+            description: retrieves sent messages
+            operationId: retrieveSentMessagesRequest
+            parameters:
+                - default: tr
+                  example: TR
+                  in: header
+                  name: Accept-Language
+                  type: string
+                  x-go-name: AcceptLanguage
+            responses:
+                "200":
+                    $ref: '#/responses/retrieveSentMessagesResponse'
+            summary: RetrieveSentMessages
+            tags:
+                - Sender
+    /start-stop-sending:
+        post:
+            description: starts or stops message sending
+            operationId: startStopMessageSendingRequest
+            parameters:
+                - default: tr
+                  example: TR
+                  in: header
+                  name: Accept-Language
+                  type: string
+                  x-go-name: AcceptLanguage
+                - in: body
+                  name: Body
+                  schema:
+                    properties:
+                        action:
+                            enum:
+                                - start
+                                - stop
+                            type: string
+                            x-go-name: Action
+                    required:
+                        - action
+                    type: object
+            responses:
+                "200":
+                    $ref: '#/responses/startStopMessageSendingResponse'
+            summary: StartStopMessageSending
+            tags:
+                - Sender
+produces:
+    - application/json
+responses:
+    retrieveSentMessagesResponse:
+        description: Success
+        headers:
+            Body: {}
+        schema:
+            properties:
+                messages:
+                    items:
+                        $ref: '#/definitions/MessageTransaction'
+                    type: array
+                    x-go-name: Messages
+                result:
+                    $ref: '#/definitions/apiError'
+            type: object
+    startStopMessageSendingResponse:
+        description: Success
+        headers:
+            Body: {}
+        schema:
+            properties:
+                result:
+                    $ref: '#/definitions/apiError'
+                status:
+                    type: string
+                    x-go-name: Status
+            type: object
+schemes:
+    - https
+    - http
+security:
+    - api_key: []
+securityDefinitions:
+    api_key:
+        in: header
+        name: KEY
+        type: apiKey
+swagger: "2.0"

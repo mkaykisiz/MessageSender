@@ -1,0 +1,14 @@
+{
+  "default-internal-server-error-message": {
+    "one": "Unexpected error. Please try again later.",
+    "other": "Unexpected error. Please try again later."
+  },
+  "default-unauthorized-error-message": {
+    "one": "An unknown error has occurred.",
+    "other": "An unknown error has occurred."
+  },
+  "default-ok-positive-button-text": {
+    "one": "OK",
+    "other": "OK"
+  }
+}

@@ -1,0 +1,26 @@
+# goland
+.idea/
+
+# vscode
+.vscode/
+__debug_*
+
+# vendor mod
+vendor/
+
+# run
+.run/
+
+# macos
+.DS_Store
+
+# local env files
+.env
+
+# local mongo and redis volumes
+mongo/volumes
+redis/volumes
+
+# test
+cover.html
+cover.out
