@@ -2,14 +2,15 @@ package service
 
 import (
 	"context"
+	"sync"
+	"time"
+
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
 	"github.com/mkaykisiz/sender"
 	"github.com/mkaykisiz/sender/internal/client/messageclient"
 	mongostore "github.com/mkaykisiz/sender/internal/store/mongo"
 	redisstore "github.com/mkaykisiz/sender/internal/store/redis"
-	"sync"
-	"time"
 )
 
 const MaxMessageLength = 1000
@@ -122,18 +123,18 @@ func (w *Worker) process() {
 		go func(msg sender.MessageTransaction) {
 			defer wg.Done()
 
-			if len(msg.Content) > MaxMessageLength {
-				// Update status to FAILED
+			if !msg.IsValid() {
+				// Update status to INVALID
 				w.logWithLogger(nil, map[string]interface{}{
 					"method": "process",
-					"msg":    "message content exceeds character limit",
+					"msg":    "message is invalid",
 					"id":     msg.ID,
 				})
-				err = w.ms.UpdateMessageStatus(ctx, msg.ID, mongostore.STATUS_FAILED, nil)
+				err = w.ms.UpdateMessageStatus(ctx, msg.ID, mongostore.STATUS_INVALID, nil)
 				if err != nil {
 					w.logWithLogger(err, map[string]interface{}{
 						"method": "process",
-						"msg":    "error updating message status to FAILED after exceeding character limit",
+						"msg":    "error updating message status to INVALID",
 						"id":     msg.ID,
 					})
 				}

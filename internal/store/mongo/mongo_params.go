@@ -9,6 +9,7 @@ var (
 	STATUS_PENDING = "pending"
 	STATUS_SENT    = "sent"
 	STATUS_FAILED  = "failed"
+	STATUS_INVALID = "invalid"
 )
 
 type MessageFilter struct {

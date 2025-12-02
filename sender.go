@@ -3,9 +3,10 @@ package sender
 import (
 	"context"
 	"errors"
-	apierror "github.com/mkaykisiz/sender/internal/apierror"
 	"sync/atomic"
 	"time"
+
+	apierror "github.com/mkaykisiz/sender/internal/apierror"
 
 	"github.com/nicksnyder/go-i18n/v2/i18n"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -23,6 +24,10 @@ const (
 const (
 	LanguageCodeTR = "tr"
 	LanguageCodeEN = "en"
+)
+
+const (
+	MaxMessageLength = 1000
 )
 
 var (
@@ -47,6 +52,13 @@ type (
 		CreatedAt time.Time          `json:"created_at" bson:"created_at"`
 	}
 )
+
+func (m *MessageTransaction) IsValid() bool {
+	if len(m.Content) > MaxMessageLength || len(m.Recipient) == 0 || len(m.Content) == 0 {
+		return false
+	}
+	return true
+}
 
 type HealthStatus atomic.Bool
 

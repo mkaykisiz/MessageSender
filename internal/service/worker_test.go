@@ -309,7 +309,7 @@ func TestWorker_Process(t *testing.T) {
 			mongostore.MessageFilter{Status: []string{mongostore.STATUS_PENDING, mongostore.STATUS_FAILED}},
 			mongostore.MessageOptions{Limit: int64(2)}).Return(messages, nil).Once()
 
-		mockMongoStore.On("UpdateMessageStatus", mock.Anything, msgID, mongostore.STATUS_FAILED, mock.Anything).
+		mockMongoStore.On("UpdateMessageStatus", mock.Anything, msgID, mongostore.STATUS_INVALID, mock.Anything).
 			Return(nil).Once()
 
 		worker.process()
